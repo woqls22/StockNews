@@ -28,5 +28,5 @@
 
 ## Revision History
 - [20.08.24] : 가격정보, 증권 뉴스 속보 파싱 (selenium), csv파일 저장
-<img src= "Resources/get_info.JPG" width="680px">
-<img src= "Resources/csvfile.JPG" width="680px">
+<img src= "BackEnd/PythonScripts/Resources/get_info.JPG" width="680px">
+<img src= "BackEnd/PythonScripts/Resources/csvfile.JPG" width="680px">
