@@ -5,7 +5,7 @@ import pandas as pd
 Head = True
 def PrintNews(headline_list, news_info, Text, CompanyFromNews):
     for i in range(len(headline_list)):
-        print('['+ news_info[i], end = '] ')
+        print('|'+ news_info[i], end = '| ')
         print(headline_list[i], end=' / ')
         print("[기업정보 : "+CompanyFromNews[i]+"]")
         #print(Text[i]) #본문보기
@@ -150,10 +150,15 @@ def GetCompanyList():
    return CompanyList
 
 def company_in_news(news,CompanyList):
+    result = "None"
     for i in CompanyList:
-        if (i in news):
-            return str(i)
-    return "None"
+        if (i in news): #한화, 한화투자운용 구분위함
+            if(result =="None"):
+                result = str(i)
+            else:
+                if(len(result)<len(str(i))):
+                    result = str(i)
+    return result
 
 def GetCompanyFromNews(headlines, CompanyList):
     CompanyFromNews = []
