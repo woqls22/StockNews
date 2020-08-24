@@ -3,6 +3,10 @@ from selenium import webdriver
 import datetime
 import pandas as pd
 import csv
+import urllib.request
+import matplotlib.pyplot as plt
+from PIL import Image
+import time
 Head = True
 def PrintNews(headline_list, news_info, Text, CompanyFromNews):
     for i in range(len(headline_list)):
@@ -200,22 +204,66 @@ def FindWritePoint(line):
         if (line[i] == ''):
             write_point = i
             return write_point
+    return write_point
 
 def Write_News(headlines, CompanyFromNews,nowDatetime):
     file = open('Data/CompanyNewsList.csv', 'r')
     reader = csv.reader(file)
     lines=[]
+    NewsFile = []
     write_point=0
     for line in reader:
         write_point = FindWritePoint(line)
         for index in range(len(CompanyFromNews)):
             if (line[1] == CompanyFromNews[index]):
                 line[write_point] = str('[#]')+nowDatetime+str('[#]')+headlines[index]
-                print(line[write_point].split('[#]')[2])
-                print(CompanyFromNews[index] + " : "+headlines[index])
+                NewsFile.append(CompanyFromNews[index] + " : "+headlines[index])
         lines.append(line)
     file = open('Data/CompanyNewsList.csv', 'w', newline='')
     writer = csv.writer(file)
     writer.writerows(lines)
     file.close()
-    print("기업별 뉴스 CSV File 작성 완료")
+    print("#기업별 뉴스 CSV File 작성 완료")
+    return NewsFile
+def Get_KospiGraphDriver(Headless):
+    if (Headless):
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('headless')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('land=ko_KR')
+        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe",
+                                  chrome_options=chrome_options)
+        driver.implicitly_wait(1)
+    else:
+        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
+    url = "https://finance.daum.net/"  # 다음금융
+    driver.get(url)  # driver open
+    return driver
+
+def GetKospiGraph(driver, PriceInfo, Fluctuation ):
+    # KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 순
+    KospiImg = driver.find_element_by_xpath('/html/body/div/div[3]/div/div[1]/div[1]/a/img')
+    KosdaqImg = driver.find_element_by_xpath('/html/body/div/div[3]/div/div[1]/div[2]/a/img')
+    link=KospiImg.get_attribute('src')
+    urllib.request.urlretrieve(link, 'Data/Kospi.jpg') #코스피 이미지 다운로드
+    link=KosdaqImg.get_attribute('src')
+    urllib.request.urlretrieve(link, 'Data/Kosdaq.jpg') #코스닥 이미지 다운로드
+
+    KospiGraph =  Image.open("Data/Kospi.jpg").convert("RGBA")
+    KosdaqGraph = Image.open("Data/Kosdaq.jpg").convert("RGBA")
+
+    fig = plt.figure(figsize=(16,6))
+    rows = 1
+    cols = 2
+    ax1 = fig.add_subplot(rows, cols, 1)
+    ax1.imshow(KospiGraph)
+    ax1.set_xlabel('KOSPI\nPrice : '+PriceInfo[1]+' / Fluctuation : '+Fluctuation[1])
+    ax1.set_xticks([]), ax1.set_yticks([])
+
+    ax2 = fig.add_subplot(rows, cols, 2)
+    ax2.imshow(KosdaqGraph)
+    ax2.set_xlabel('KODAQ\nPrice : '+PriceInfo[3]+' / Fluctuation : '+Fluctuation[3])
+    ax2.set_xticks([]), ax2.set_yticks([])
+    plt.show()
+    time.sleep(1)
+    plt.close()

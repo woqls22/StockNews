@@ -11,10 +11,12 @@ def GetNewsInfo(driver):
     Util.save_headlines(headlines, news_info, Text,CompanyFromNews,NewsUrl)
     Util.PrintNews(headlines, news_info, Text, CompanyFromNews)
     return headlines, news_info, Text, NewsUrl,CompanyFromNews
+
 def GetPriceInfo(driver):
     NameList, PriceInfo, Fluctuation = Util.get_prices(driver) #KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 순
     Util.PrintPrice(NameList, PriceInfo, Fluctuation)
     return NameList, PriceInfo, Fluctuation
+
 def MakeCompanyFile(MakeCompanyList):
     #Company CSV파일 생성
     Util.MakeCompanyCSV()
@@ -23,6 +25,7 @@ if __name__ == '__main__':
     CompanyList = Util.GetCompanyList() # 코스피 상장 기업 업로드
     NewsDriver = Util.News_get_driver(Headless)
     PriceDriver = Util.NowPriceDriver(Headless)
+    KospiImageDriver = Util.Get_KospiGraphDriver(Headless)
     MakeCompanyFile(MakeCompanyList) #기업 리스트 갱신
     while(True):
         now = datetime.datetime.now()
@@ -36,6 +39,8 @@ if __name__ == '__main__':
 
         headlines, news_info, Text,NewsUrl,CompanyFromNews = GetNewsInfo(NewsDriver) #뉴스에서 기업 추출
         Util.Write_News(headlines, CompanyFromNews,nowDatehour)
-        time.sleep(60)
+        Util.GetKospiGraph(KospiImageDriver, PriceInfo, Fluctuation)
+
+        time.sleep(3)
         NewsDriver.refresh()
         PriceDriver.refresh()
