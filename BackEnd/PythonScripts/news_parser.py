@@ -2,6 +2,7 @@
 from selenium import webdriver
 import datetime
 import pandas as pd
+import csv
 Head = True
 def PrintNews(headline_list, news_info, Text, CompanyFromNews):
     for i in range(len(headline_list)):
@@ -169,3 +170,52 @@ def GetCompanyFromNews(headlines, CompanyList):
         else:
             CompanyFromNews.append(Company)
     return CompanyFromNews
+
+def MakeCompanyCSV():
+    filepath = 'KospiList.txt'  # 코스피
+    CompanyList = []
+    with open(filepath, mode='rt', encoding='utf-8') as file:
+        while True:
+            company = file.readline()
+            if not company: break
+            CompanyList.append(company.split('\n')[0])
+
+    filepath = 'Kosdaq.txt'  # 코스닥
+    with open(filepath, mode='rt', encoding='utf-8') as file:
+        while True:
+            company = file.readline()
+            if not company: break
+            CompanyList.append(company.split('\n')[0])
+    number = range(1,len(CompanyList)+1)
+    data = pd.DataFrame({
+        '번호': number,
+        '기업명' : CompanyList,
+        '뉴스' : ['']*len(CompanyList)
+    })
+    data.to_csv('Data/CompanyNewsList.csv', index=False, encoding='cp949')
+
+def FindWritePoint(line):
+    write_point = 0
+    for i in range(len(line)):  # write할 위치 찾기
+        if (line[i] == ''):
+            write_point = i
+            return write_point
+
+def Write_News(headlines, CompanyFromNews,nowDatetime):
+    file = open('Data/CompanyNewsList.csv', 'r')
+    reader = csv.reader(file)
+    lines=[]
+    write_point=0
+    for line in reader:
+        write_point = FindWritePoint(line)
+        for index in range(len(CompanyFromNews)):
+            if (line[1] == CompanyFromNews[index]):
+                line[write_point] = str('[#]')+nowDatetime+str('[#]')+headlines[index]
+                print(line[write_point].split('[#]')[2])
+                print(CompanyFromNews[index] + " : "+headlines[index])
+        lines.append(line)
+    file = open('Data/CompanyNewsList.csv', 'w', newline='')
+    writer = csv.writer(file)
+    writer.writerows(lines)
+    file.close()
+    print("기업별 뉴스 CSV File 작성 완료")
