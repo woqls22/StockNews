@@ -14,3 +14,9 @@ class MySqlController:
             self.curs.execute(sql, (CompanyFromNews[index], Headline[index], Text[index], URL[index], NewsInfo[index], str(index+1)))
             self.conn.commit()
         print("Stock News Updated.")
+    def InsertNewsHistory(self, CompanyFromNews, Headline, Text, URL, NewsInfo,DateTime):
+        for index in range(0,len(CompanyFromNews)):
+            sql = 'Insert IGNORE  INTO NewsHistory VALUES(%s, %s, %s, %s, %s,%s)'
+            self.curs.execute(sql, (CompanyFromNews[index], Headline[index], Text[index], URL[index], NewsInfo[index], DateTime))
+            self.conn.commit()
+        print("Stock NewsHistory Updated.")

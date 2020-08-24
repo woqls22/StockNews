@@ -50,8 +50,9 @@ if __name__ == '__main__':
         Util.GetKospiGraph(KospiImageDriver, PriceInfo, Fluctuation) # Kospi, Kosdaq 그래프 이미지 저장
 
         DBController.UpdateNews(CompanyFromNews, headlines, Text, NewsUrl, news_info) #최신 20개 기사 DB저장
-
+        DBController.InsertNewsHistory(CompanyFromNews, headlines, Text, NewsUrl, news_info,nowDatehour)
         # ==== 30초마다 반복 수행
         time.sleep(30)
         NewsDriver.refresh()
         PriceDriver.refresh()
+
