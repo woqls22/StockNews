@@ -2,25 +2,31 @@ import news_parser as Util
 import datetime
 import time
 CompanyList=[]
-def GetNewsInfo():
-    headlines, news_info, Text,NewsUrl = Util.GetNews()
+Headless = False # False : 창띄움, 창 닫음
+
+def GetNewsInfo(driver):
+    headlines, news_info, Text,NewsUrl = Util.GetNews(driver) # 헤드라인, 신문사 정보 및 게시 시간, 본문, 기사링크 파싱.
     CompanyFromNews = Util.GetCompanyFromNews(headlines, CompanyList)
     Util.save_headlines(headlines, news_info, Text,CompanyFromNews,NewsUrl)
     Util.PrintNews(headlines, news_info, Text, CompanyFromNews)
 
-def GetPriceInfo():
-    NameList, PriceInfo, Fluctuation = Util.get_prices() #KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 순
+def GetPriceInfo(driver):
+    NameList, PriceInfo, Fluctuation = Util.get_prices(driver) #KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 순
     Util.PrintPrice(NameList, PriceInfo, Fluctuation)
 
 if __name__ == '__main__':
     CompanyList = Util.GetCompanyList() # 코스피 상장 기업 업로드
+    NewsDriver = Util.News_get_driver(Headless)
+    PriceDriver = Util.NowPriceDriver(Headless)
     while(True):
         now = datetime.datetime.now()
         nowDatetime = now.strftime('%Y_%m_%d_%H시%M분%S초')
-        print("#########################################")
+        print("\n\n#########################################")
         print("||  [현재 시각] : " + nowDatetime+"  ||")
         print("========================================")
-        GetPriceInfo()
+        GetPriceInfo(PriceDriver)
         print("========================================")
-        GetNewsInfo()
-        time.sleep(60)
+        GetNewsInfo(NewsDriver)
+        time.sleep(2)
+        NewsDriver.refresh()
+        PriceDriver.refresh()

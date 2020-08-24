@@ -2,6 +2,7 @@
 from selenium import webdriver
 import datetime
 import pandas as pd
+Head = True
 def PrintNews(headline_list, news_info, Text, CompanyFromNews):
     for i in range(len(headline_list)):
         print('['+ news_info[i], end = '] ')
@@ -14,8 +15,8 @@ def PrintPrice(NameList, PriceInfo, Fluctuation):
         print(NameList[i], end=' : ')
         print(PriceInfo[i], end='[KRW], / 전일대비 : ')
         print(Fluctuation[i])
-def News_get_driver(Head):
-   if(Head == False):
+def News_get_driver(Headless):
+   if(Headless):
        chrome_options = webdriver.ChromeOptions()
        chrome_options.add_argument('headless')
        chrome_options.add_argument('--disable-gpu')
@@ -28,12 +29,11 @@ def News_get_driver(Head):
    driver.get(url)  # driver open
    return driver
 
-def GetNews():
+def GetNews(driver):
     headline_list = []
     news_info = []
     Text = []
     NewsUrl = []
-    driver = News_get_driver(False)
     table = driver.find_element_by_class_name('type06_headline') # Section 1 Table 파싱
     rows = table.find_elements_by_tag_name("li")
     for index, value in enumerate(rows):
@@ -102,8 +102,8 @@ def save_headlines(headline_list, news_info, Text,CompanyFromNews,NewsUrl):
     data.to_csv('Data/News'+nowDatetime+'.csv', index = False, encoding='cp949')
     return 'Data/News'+nowDatetime+'.csv'
 
-def NowPriceDriver(Head):
-    if (Head == False):
+def NowPriceDriver(Headless):
+    if (Headless):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('headless')
         chrome_options.add_argument('--disable-gpu')
@@ -117,11 +117,10 @@ def NowPriceDriver(Head):
     driver.get(url)  # driver open
     return driver
 
-def get_prices():
+def get_prices(driver):
     NameList = [] # 종목
     PriceInfo=[] # 현재 가격 정보
     Fluctuation = [] #전일 대비 변동폭
-    driver = NowPriceDriver(False)
     table = driver.find_element_by_class_name('section-wap-top')
     cols = table.find_elements_by_class_name('index-info_wap')
     for index, value in enumerate(cols):
