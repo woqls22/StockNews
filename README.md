@@ -26,6 +26,7 @@
 - [X]  뉴스에 종목 고유 인덱스 부여[08.24]
 - [X]  기업별 뉴스 CSV 파일 저장 구현[08.24]
 - [X]  KOSPI / KOSDAQ 현재 시세, 그래프 파싱[08.24]
+- [X]  News History Table 작성[08.24]
 - [ ]  종목별 해당하는 뉴스 분류기 웹서비스 구현
 - [ ]  Machine Learning을 통한 Positive, Negative 내용 분석
 - [ ]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화
