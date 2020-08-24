@@ -2,10 +2,11 @@
 from selenium import webdriver
 import datetime
 import pandas as pd
-def PrintNews(headline_list, news_info, Text):
+def PrintNews(headline_list, news_info, Text, CompanyFromNews):
     for i in range(len(headline_list)):
         print('['+ news_info[i], end = '] ')
-        print(headline_list[i])
+        print(headline_list[i], end=' / ')
+        print("[기업정보 : "+CompanyFromNews[i]+"]")
         #print(Text[i]) #본문보기
 
 def PrintPrice(NameList, PriceInfo, Fluctuation):
@@ -19,31 +20,36 @@ def News_get_driver(Head):
        chrome_options.add_argument('headless')
        chrome_options.add_argument('--disable-gpu')
        chrome_options.add_argument('land=ko_KR')
-       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\chromedriver.exe", chrome_options=chrome_options)
+       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe", chrome_options=chrome_options)
        driver.implicitly_wait(1)
    else:
-       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\chromedriver.exe")
+       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
    url = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=101&sid2=258"  # Naver Stock News
    driver.get(url)  # driver open
    return driver
 
-def get_headlines():
+def GetNews():
     headline_list = []
     news_info = []
     Text = []
+    NewsUrl = []
     driver = News_get_driver(False)
     table = driver.find_element_by_class_name('type06_headline') # Section 1 Table 파싱
     rows = table.find_elements_by_tag_name("li")
     for index, value in enumerate(rows):
         try:
             body = value.find_elements_by_tag_name('dt')[1] #이미지가 첨부된 뉴스 헤드라인 파싱
+            link = body.find_elements_by_tag_name('a')[0].get_attribute('href')
+            NewsUrl.append(link)
             headline_list.append(body.text)
             info = value.find_elements_by_tag_name('dd')[0] # 신문사, 시간 파싱
-
         except:
             body = value.find_elements_by_tag_name('dt')[0] # 이미지 미첨부 뉴스 헤드라인 파싱
+            link = body.find_elements_by_tag_name('a')[0].get_attribute('href')
+            NewsUrl.append(link)
             headline_list.append(body.text)
         try:
+            #//*[@id="main_content"]/div[2]/ul[1]/li[2]/dl/dt[2]/a
             info = value.find_elements_by_tag_name('dd')[0] # 신문사, 시간 파싱
             info = info.text.split("\n")
             news_info.append(info[1])
@@ -56,9 +62,13 @@ def get_headlines():
     for index, value in enumerate(rows):
         try:
             body = value.find_elements_by_tag_name('dt')[1] #이미지가 첨부된 뉴스 헤드라인 파싱
+            link = body.find_elements_by_tag_name('a')[0].get_attribute('href')
+            NewsUrl.append(link)
             headline_list.append(body.text)
         except:
             body = value.find_elements_by_tag_name('dt')[0] # 이미지 미첨부 뉴스 헤드라인 파싱
+            link = body.find_elements_by_tag_name('a')[0].get_attribute('href')
+            NewsUrl.append(link)
             headline_list.append(body.text)
         try:
             info = value.find_elements_by_tag_name('dd')[0]  # 신문사, 시간 파싱
@@ -68,8 +78,9 @@ def get_headlines():
         except:
             print("Err ] info parsing")
             
-    return headline_list, news_info, Text # 순서대로 헤드라인, 신문사 정보 및 시간 정보, 본문 내용
-def save_headlines(headline_list, news_info, Text):
+    return headline_list, news_info, Text, NewsUrl # 순서대로 헤드라인, 신문사 정보 및 시간 정보, 본문 내용
+
+def save_headlines(headline_list, news_info, Text,CompanyFromNews,NewsUrl):
     now = datetime.datetime.now()
     # print(now)  # 2015-04-19 12:11:32.669083
     #
@@ -84,23 +95,28 @@ def save_headlines(headline_list, news_info, Text):
     data = pd.DataFrame({
         '헤드라인' : headline_list,
         '신문사 정보' : news_info,
-        '본문' : Text
+        '본문' : Text,
+        '기업정보' : CompanyFromNews,
+        '기사 주소' : NewsUrl
     })
     data.to_csv('Data/News'+nowDatetime+'.csv', index = False, encoding='cp949')
+    return 'Data/News'+nowDatetime+'.csv'
+
 def NowPriceDriver(Head):
     if (Head == False):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('land=ko_KR')
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\chromedriver.exe",
+        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe",
                                   chrome_options=chrome_options)
         driver.implicitly_wait(1)
     else:
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\chromedriver.exe")
-    url = "http://www.krx.co.kr/main/main.jsp"  # Naver Stock News
+        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
+    url = "http://www.krx.co.kr/main/main.jsp"  # 한국 거래소
     driver.get(url)  # driver open
     return driver
+
 def get_prices():
     NameList = [] # 종목
     PriceInfo=[] # 현재 가격 정보
@@ -116,3 +132,36 @@ def get_prices():
         PriceInfo.append(info.text)
         Fluctuation.append(change.text)
     return NameList, PriceInfo, Fluctuation
+
+def GetCompanyList():
+   filepath = 'KospiList.txt' #코스피
+   CompanyList = []
+   with open(filepath, mode = 'rt', encoding='utf-8') as file:
+       while True:
+           company = file.readline()
+           if not company: break
+           CompanyList.append(company.split('\n')[0])
+           
+   filepath = 'Kosdaq.txt' #코스닥
+   with open(filepath, mode='rt', encoding='utf-8') as file:
+       while True:
+           company = file.readline()
+           if not company: break
+           CompanyList.append(company.split('\n')[0])
+   return CompanyList
+
+def company_in_news(news,CompanyList):
+    for i in CompanyList:
+        if (i in news):
+            return str(i)
+    return "None"
+
+def GetCompanyFromNews(headlines, CompanyList):
+    CompanyFromNews = []
+    for news in headlines:
+        Company = company_in_news(news,CompanyList)
+        if(Company == "None"):
+            CompanyFromNews.append('-')
+        else:
+            CompanyFromNews.append(Company)
+    return CompanyFromNews
