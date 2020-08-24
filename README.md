@@ -17,7 +17,7 @@
 ## Schedule
 - [X]  KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 가격 정보 파싱 [08.24]
 - [X]  네이버 증권뉴스 속보 TOP 20 파싱 [08.24]
-- [ ]  뉴스헤드라인으로부터 해당하는 종목 인식
+- [X]  뉴스헤드라인으로부터 해당하는 종목 인식[08.24]
 - [ ]  뉴스에 종목 고유 인덱스 부여
 - [ ]  종목별 해당하는 뉴스 분류기 웹서비스 구현
 - [ ]  Machine Learning을 통한 Positive, Negative 내용 분석
