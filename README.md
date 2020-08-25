@@ -18,6 +18,7 @@
 - numpy 1.19.1
 - matplotlib 3.3.1
 - pillow 7.2.0
+- AWS RDS (mysql)
 
 ## Schedule
 - [X]  KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 가격 정보 파싱 [08.24]
@@ -27,9 +28,11 @@
 - [X]  기업별 뉴스 CSV 파일 저장 구현[08.24]
 - [X]  KOSPI / KOSDAQ 현재 시세, 그래프 파싱[08.24]
 - [X]  News History Table 작성[08.24]
+- [X]  News별 긍정, 중립, 부정 분류를 위한 라벨링 작업 진행[08.25]
+- [ ]  분석된 긍정, 중립, 부정 라벨링을 바탕으로 모델 학습 진행
+- [ ]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화
 - [ ]  종목별 해당하는 뉴스 분류기 웹서비스 구현
 - [ ]  Machine Learning을 통한 Positive, Negative 내용 분석
-- [ ]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화
 - [ ]  지수화 된 정보를 바탕으로 모의 투자 진행
 - [ ]  웹사이트화, 서비스 제공
 - [ ]  KOSPI / KOSDAQ 상장 기업 DB 자동 업로드 모듈 구현
