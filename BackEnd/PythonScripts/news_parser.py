@@ -26,10 +26,10 @@ def News_get_driver(Headless):
        chrome_options.add_argument('headless')
        chrome_options.add_argument('--disable-gpu')
        chrome_options.add_argument('land=ko_KR')
-       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe", chrome_options=chrome_options)
+       driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe", chrome_options=chrome_options)
        driver.implicitly_wait(1)
    else:
-       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
+       driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
    url = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=101&sid2=258"  # Naver Stock News
    driver.get(url)  # driver open
    return driver
@@ -113,11 +113,11 @@ def NowPriceDriver(Headless):
         chrome_options.add_argument('headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('land=ko_KR')
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe",
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe",
                                   chrome_options=chrome_options)
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(3)
     else:
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
     url = "http://www.krx.co.kr/main/main.jsp"  # 한국 거래소
     driver.get(url)  # driver open
     return driver
@@ -125,16 +125,21 @@ def NowPriceDriver(Headless):
 def get_prices(driver):
     NameList = [] # 종목
     PriceInfo=[] # 현재 가격 정보
-    Fluctuation = [] #전일 대비 변동폭
+    Fluctuation = [] #전일 대비 변동폭mai
     table = driver.find_element_by_class_name('section-wap-top')
     cols = table.find_elements_by_class_name('index-info_wap')
     for index, value in enumerate(cols):
         info = value.find_elements_by_class_name('index-price')[0]
         Name = value.find_elements_by_class_name('index-name')[0]
-        change = value.find_elements_by_class_name('index-up')[0]
+        change = value.find_elements_by_class_name('index-up')
+        if(len(change)<=0):
+            change =  value.find_elements_by_class_name('index-down')[0]
+        else:
+            change = value.find_elements_by_class_name('index-up')[0]
         NameList.append(Name.text)
         PriceInfo.append(info.text)
         Fluctuation.append(change.text)
+
     return NameList, PriceInfo, Fluctuation
 
 def GetCompanyList():
@@ -231,11 +236,11 @@ def Get_KospiGraphDriver(Headless):
         chrome_options.add_argument('headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('land=ko_KR')
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe",
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe",
                                   chrome_options=chrome_options)
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(3)
     else:
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
     url = "https://finance.daum.net/"  # 다음금융
     driver.get(url)  # driver open
     return driver
@@ -266,3 +271,4 @@ def GetKospiGraph(driver, PriceInfo, Fluctuation ):
     ax2.set_xticks([]), ax2.set_yticks([])
     #plt.show()
     plt.savefig('KOSPI_KOSDAQ.png')
+    plt.close(fig)
