@@ -10,6 +10,9 @@
 - 즐겨찾기한 기업에 해당하는 뉴스만 제공
 - 데이터 분석을 통한 정보 제공
 
+## Structure
+<img src= "BackEnd/PythonScripts/Resources/structure.jpg" >
+
 ## 개발 환경
 - Python3.7
 - selenium 3.141.0
