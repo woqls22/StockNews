@@ -41,13 +41,15 @@
 
 ## Revision History
 - [20.08.24] : 가격정보, 증권 뉴스 속보 파싱 (selenium), DB연동 저장
-<img src= "BackEnd/PythonScripts/Resources/get_info.JPG" width="680px">
+<img src= "BackEnd/PythonScripts/Resources/get_info.JPG" >
 
 - [20.08.24] : 뉴스 정보 확인 시 회사명이 겹치는 현상 수정
 - [20.08.24] : 기업 별 뉴스 분류 모듈 구현
-<img src= "BackEnd/PythonScripts/Resources/database.JPG" width="680px">
+<img src= "BackEnd/PythonScripts/Resources/database.JPG" >
 
 - [20.08.24] : KOSPI/KOSDAQ GRAPH
-<img src= "BackEnd/PythonScripts/Resources/Graph.png" width="680px">
+<img src= "BackEnd/PythonScripts/Resources/Graph.png" >
 
 - [20.08.26] : 주가변동에 따라 css-class변경발생. 크롤링 오류 수정(한국거래소)
+- [20.08.26] : 긍정, 부정 단어에 따른 뉴스 가중치 부여 결과
+<img src= "BackEnd/PythonScripts/Resources/label.JPG" >
