@@ -29,6 +29,7 @@
 - [X]  KOSPI / KOSDAQ 현재 시세, 그래프 파싱[08.24]
 - [X]  News History Table 작성[08.24]
 - [X]  News별 긍정, 중립, 부정 분류를 위한 라벨링 작업 진행[08.25]
+- [ ]  News Headline 1만개 라벨링 작업
 - [ ]  분석된 긍정, 중립, 부정 라벨링을 바탕으로 모델 학습 진행
 - [ ]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화
 - [ ]  종목별 해당하는 뉴스 분류기 웹서비스 구현
@@ -48,3 +49,5 @@
 
 - [20.08.24] : KOSPI/KOSDAQ GRAPH
 <img src= "BackEnd/PythonScripts/Resources/Graph.png" width="680px">
+
+- [20.08.26] : 주가변동에 따라 css-class변경발생. 크롤링 오류 수정(한국거래소)
