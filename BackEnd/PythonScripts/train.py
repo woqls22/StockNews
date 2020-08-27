@@ -7,6 +7,7 @@ from tensorflow.keras.layers import Embedding, Dense, LSTM
 from tensorflow.keras.models import Sequential
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import re
 import datetime
 pos = []
@@ -23,14 +24,14 @@ def run():
     X_train = []
     for sentence in train_data['headline']:
         temp_X = []
-        sentence = re.sub('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…\"\“》]', '', sentence)
+        sentence = re.sub('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…\"\“》]', '', str(sentence))
         temp_X = okt.morphs(sentence, stem=True) #토큰화 작업
         temp_X = [word for word in temp_X if not word in stopwords]
         X_train.append(temp_X)
     X_test=[]
     for sentence in test_data['headline']:
         temp_X = []
-        sentence = re.sub('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…\"\“》]', '', sentence)
+        sentence = re.sub('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…\"\“》]', '', str(sentence))
         temp_X = okt.morphs(sentence, stem=True) #토큰화 작업
         temp_X = [word for word in temp_X if not word in stopwords]
         X_test.append(temp_X)
@@ -45,10 +46,10 @@ def run():
     X_test = tokenizer.texts_to_sequences(X_test)
     print("제목의 최대 길이 : ", max(len(l) for l in X_train))
     print("제목의 평균 길이 : ", sum(map(len, X_train))/ len(X_train))
-    # plt.hist([len(s) for s in X_train], bins=50)
-    # plt.xlabel('length of Data')
-    # plt.ylabel('number of Data')
-    # plt.show()
+    plt.hist([len(s) for s in X_train], bins=50)
+    plt.xlabel('length of Data')
+    plt.ylabel('number of Data')
+    plt.show()
     # y값 (라벨링)인코딩
     y_train = []
     y_test = []
@@ -70,8 +71,8 @@ def run():
 
     y_train = np.array(y_train)
     y_test = np.array(y_test)
-
-    max_len = 30 #전체 데이터 길이를 30으로 맞춤
+    # 리스트 셔플
+    max_len = 40 #전체 데이터 길이를 30으로 맞춤
     X_train = pad_sequences(X_train, maxlen=max_len)
     X_test = pad_sequences(X_test, maxlen = max_len)
 
