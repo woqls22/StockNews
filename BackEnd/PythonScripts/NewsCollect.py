@@ -47,8 +47,9 @@ def shuffle(filename):
         'headline': x_train,
         'label': y_train
     })
-    data.to_csv(filename, index=False, encoding='cp949')
+    data.to_csv('result.csv', index=False, encoding='cp949')
 
 if __name__ == '__main__':
-    #get_newses("업계 절규")
+    #get_newses("수주체결")
+    shuffle('Data/train.csv')
     shuffle('Data/test.csv')

@@ -40,8 +40,10 @@ class MySqlController:
             sql = "SELECT Headline, NewsInfo, Time, URL FROM NewsHistory where Company = %s"
             self.curs.execute(sql,(CompanyName))
             data = self.curs.fetchall()
+            result = []
             for i in data:
-                print(i)
+                result.append(i[0])
+            return result
 
 if __name__ == '__main__':
     host = 'HOST'

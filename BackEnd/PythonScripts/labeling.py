@@ -31,25 +31,23 @@ def is_inPosneg(headline,posneg):
 
 def get_score(headline, positive, negative, posneg):
     score = 0
-    headline = headline.split(' ')
     if(not is_inPosneg(headline, posneg)):
         return 0
-    for i in positive:
-        if(i in headline):
-            return 1
     for i in negative:
         if(i in headline):
-            return -1
+            score = score-1
+    for i in positive:
+        if(i in headline):
+            score = score+1
     return score
 
 def Decision(score):
     if(score<0):return '-1'
-    elif(score==0):return '0'
-    else: return '1'
-def make_lable():
+    elif(score>0):return '1'
+    else: return '0'
+def make_lable(filename):
     positive, negative, posneg = make_word_list()
-    train_data = pd.read_csv("Data/train.csv", encoding='CP949')
-    test_data = pd.read_csv("Data/test.csv", encoding='CP949')
+    train_data = pd.read_csv(filename, encoding='CP949')
     score = 0
     label = []
     headlines = train_data['headline']
@@ -62,19 +60,7 @@ def make_lable():
         'headline': headlines,
         'label' : label
     })
-    data.to_csv('Data/Train1.csv', index = False, encoding='cp949')
-
-    label = []
-    headlines = test_data['headline']
-    for number in range(len(test_data['headline'])):
-        headline = test_data.iloc[number][0]
-        headline = re.sub('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…\"\“》·]', '', headline)
-        score = get_score(headline, positive, negative,posneg)
-        label.append(Decision(score))
-    data = pd.DataFrame({
-        'headline': headlines,
-        'label' : label
-    })
-    data.to_csv('Data/Test1.csv', index = False, encoding='cp949')
+    data.to_csv(filename, index = False, encoding='cp949')
 if __name__ == '__main__':
-    make_lable()
+    make_lable('navernews.csv')
+    print("done")

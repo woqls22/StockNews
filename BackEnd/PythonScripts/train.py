@@ -83,7 +83,7 @@ def run():
     model.add(Dense(3,activation='softmax'))
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    history = model.fit(X_train,y_train, epochs=10, batch_size=10, validation_split=0.1)
+    history = model.fit(X_train,y_train, epochs=5, batch_size=10, validation_split=0.1)
 
     predict = model.predict(X_test)
     predict_labels = np.argmax(predict, axis=1)
@@ -94,18 +94,18 @@ def run():
     for i in range(30):
         origin_label=""
         if(original_labels[i] == 1):
-            origin_label="0"
+            origin_label="중립"
         elif (original_labels[i] == 2):
-            origin_label = "호재"
+            origin_label = "긍정"
         else:
-            origin_label="악재"
+            origin_label="부정"
         predict_label = ""
         if (predict_labels[i] == 1):
-            predict_label = "0"
+            predict_label = "중립"
         elif (predict_labels[i] == 2):
-            predict_label = "호재"
+            predict_label = "긍정"
         else:
-            predict_label = "악재"
+            predict_label = "부정"
         print("[", test_data['headline'].iloc[i], "]\t[예측한 라벨 : ",predict_label,"]")
     now = datetime.datetime.now()
     nowDatetime = now.strftime('%Y_%m_%d_%H시%M분%S초')
