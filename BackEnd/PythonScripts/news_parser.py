@@ -2,6 +2,11 @@
 from selenium import webdriver
 import datetime
 import pandas as pd
+import csv
+import urllib.request
+import matplotlib.pyplot as plt
+from PIL import Image
+import time
 Head = True
 def PrintNews(headline_list, news_info, Text, CompanyFromNews):
     for i in range(len(headline_list)):
@@ -21,10 +26,10 @@ def News_get_driver(Headless):
        chrome_options.add_argument('headless')
        chrome_options.add_argument('--disable-gpu')
        chrome_options.add_argument('land=ko_KR')
-       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe", chrome_options=chrome_options)
+       driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe", chrome_options=chrome_options)
        driver.implicitly_wait(1)
    else:
-       driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
+       driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
    url = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=101&sid2=258"  # Naver Stock News
    driver.get(url)  # driver open
    return driver
@@ -108,11 +113,11 @@ def NowPriceDriver(Headless):
         chrome_options.add_argument('headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('land=ko_KR')
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe",
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe",
                                   chrome_options=chrome_options)
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(3)
     else:
-        driver = webdriver.Chrome("C:\\Users\\user1\\Desktop\\StockNews\\BackEnd\\PythonScripts\\chromedriver.exe")
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
     url = "http://www.krx.co.kr/main/main.jsp"  # 한국 거래소
     driver.get(url)  # driver open
     return driver
@@ -120,16 +125,21 @@ def NowPriceDriver(Headless):
 def get_prices(driver):
     NameList = [] # 종목
     PriceInfo=[] # 현재 가격 정보
-    Fluctuation = [] #전일 대비 변동폭
+    Fluctuation = [] #전일 대비 변동폭mai
     table = driver.find_element_by_class_name('section-wap-top')
     cols = table.find_elements_by_class_name('index-info_wap')
     for index, value in enumerate(cols):
         info = value.find_elements_by_class_name('index-price')[0]
         Name = value.find_elements_by_class_name('index-name')[0]
-        change = value.find_elements_by_class_name('index-up')[0]
+        change = value.find_elements_by_class_name('index-up')
+        if(len(change)<=0):
+            change =  value.find_elements_by_class_name('index-down')[0]
+        else:
+            change = value.find_elements_by_class_name('index-up')[0]
         NameList.append(Name.text)
         PriceInfo.append(info.text)
         Fluctuation.append(change.text)
+
     return NameList, PriceInfo, Fluctuation
 
 def GetCompanyList():
@@ -169,3 +179,96 @@ def GetCompanyFromNews(headlines, CompanyList):
         else:
             CompanyFromNews.append(Company)
     return CompanyFromNews
+
+def MakeCompanyCSV():
+    filepath = 'KospiList.txt'  # 코스피
+    CompanyList = []
+    with open(filepath, mode='rt', encoding='utf-8') as file:
+        while True:
+            company = file.readline()
+            if not company: break
+            CompanyList.append(company.split('\n')[0])
+
+    filepath = 'Kosdaq.txt'  # 코스닥
+    with open(filepath, mode='rt', encoding='utf-8') as file:
+        while True:
+            company = file.readline()
+            if not company: break
+            CompanyList.append(company.split('\n')[0])
+    number = range(1,len(CompanyList)+1)
+    data = pd.DataFrame({
+        '번호': number,
+        '기업명' : CompanyList,
+        '뉴스' : ['']*len(CompanyList)
+    })
+    data.to_csv('Data/CompanyNewsList.csv', index=False, encoding='cp949')
+
+def FindWritePoint(line):
+    write_point = 0
+    for i in range(len(line)):  # write할 위치 찾기
+        if (line[i] == ''):
+            write_point = i
+            return write_point
+    return write_point
+
+def Write_News(headlines, CompanyFromNews,nowDatetime):
+    file = open('Data/CompanyNewsList.csv', 'r')
+    reader = csv.reader(file)
+    lines=[]
+    NewsFile = []
+    write_point=0
+    for line in reader:
+        write_point = FindWritePoint(line)
+        for index in range(len(CompanyFromNews)):
+            if (line[1] == CompanyFromNews[index]):
+                line[write_point] = str('[#]')+nowDatetime+str('[#]')+headlines[index]
+                NewsFile.append(CompanyFromNews[index] + " : "+headlines[index])
+        lines.append(line)
+    file = open('Data/CompanyNewsList.csv', 'w', newline='')
+    writer = csv.writer(file)
+    writer.writerows(lines)
+    file.close()
+    # print("#기업별 뉴스 CSV File 작성 완료")
+    return NewsFile
+def Get_KospiGraphDriver(Headless):
+    if (Headless):
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('headless')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('land=ko_KR')
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe",
+                                  chrome_options=chrome_options)
+        driver.implicitly_wait(3)
+    else:
+        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
+    url = "https://finance.daum.net/"  # 다음금융
+    driver.get(url)  # driver open
+    return driver
+
+def GetKospiGraph(driver, PriceInfo, Fluctuation ):
+    # KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 순
+    KospiImg = driver.find_element_by_xpath('/html/body/div/div[3]/div/div[1]/div[1]/a/img')
+    KosdaqImg = driver.find_element_by_xpath('/html/body/div/div[3]/div/div[1]/div[2]/a/img')
+    link=KospiImg.get_attribute('src')
+    urllib.request.urlretrieve(link, 'Data/Kospi.jpg') #코스피 이미지 다운로드
+    link=KosdaqImg.get_attribute('src')
+    urllib.request.urlretrieve(link, 'Data/Kosdaq.jpg') #코스닥 이미지 다운로드
+
+    KospiGraph =  Image.open("Data/Kospi.jpg").convert("RGBA")
+    KosdaqGraph = Image.open("Data/Kosdaq.jpg").convert("RGBA")
+
+    fig = plt.figure(figsize=(16,6))
+    rows = 1
+    cols = 2
+    ax1 = fig.add_subplot(rows, cols, 1)
+    ax1.imshow(KospiGraph)
+    ax1.set_xlabel('KOSPI\nPrice : '+PriceInfo[1]+' / Fluctuation : '+Fluctuation[1])
+    ax1.set_xticks([]), ax1.set_yticks([])
+
+    ax2 = fig.add_subplot(rows, cols, 2)
+    ax2.imshow(KosdaqGraph)
+    ax2.set_xlabel('KODAQ\nPrice : '+PriceInfo[3]+' / Fluctuation : '+Fluctuation[3])
+    ax2.set_xticks([]), ax2.set_yticks([])
+    #plt.show()
+    plt.savefig('KOSPI_KOSDAQ.png')
+    plt.close(fig)
