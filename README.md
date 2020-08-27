@@ -37,7 +37,7 @@
 - [X]  Top20 News 학습된 모델을 통해 호재/악재 실시간 예측(predict.py)[08.27]
 - [X]  분석된 긍정, 중립, 부정 라벨링을 바탕으로 모델 학습 진행[08.27]
 - [X]  네이버뉴스 키워드 크롤링 구현[08.27]
-- [ ]  News Headline 1만개 라벨링 작업
+- [X]]  News Headline 1만개 라벨링 작업[08.27]
 - [ ]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화
 - [ ]  시가, 종가, 일일 거래량, 변동추이 메트릭 수치화
 - [ ]  메트릭 종합. 투자지표 도출
@@ -62,5 +62,9 @@
 <img src= "BackEnd/PythonScripts/Resources/label.JPG" >
 
 - [20.08.26] : 뉴스 데이터 1200개 학습 결과. 현재 데이터셋 구축중
-
 <img src= "BackEnd/PythonScripts/Resources/NLP.png" >
+
+- [20.08.27] : 훈련데이터 10284개, 테스트데이터 1018개 학습 진행
+
+- [20.08.27] : 히스토그램(뉴스라인 길이)
+<img src= "BackEnd/PythonScripts/Resources/histogram.JPG" >
