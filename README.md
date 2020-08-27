@@ -57,7 +57,6 @@
 - [20.08.26] : 긍정, 부정 단어에 따른 뉴스 가중치 부여 결과
 <img src= "BackEnd/PythonScripts/Resources/label.JPG" >
 
-- [20.08.26] : 뉴스 데이터 1000개 학습 결과. 현재 데이터셋 구축중
+- [20.08.26] : 뉴스 데이터 1200개 학습 결과. 현재 데이터셋 구축중
 
-<img src= "BackEnd/PythonScripts/Resources/NLP.JPG" >
-
+<img src= "BackEnd/PythonScripts/Resources/NLP.png" >
