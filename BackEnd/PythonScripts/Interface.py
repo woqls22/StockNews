@@ -31,8 +31,11 @@ class MySqlController:
             sql = 'SELECT * FROM News'
             self.curs.execute(sql)
             data = self.curs.fetchall()
+            headlines = []
             for i in data:
-                print(i)
+                headlines.append(i[2])
+            return headlines #헤드라인 리턴
+
     def GetNewsAboutCompany(self, CompanyName): # 원하는 기업 뉴스 Fetch
             sql = "SELECT Headline, NewsInfo, Time, URL FROM NewsHistory where Company = %s"
             self.curs.execute(sql,(CompanyName))
