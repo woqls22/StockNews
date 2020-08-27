@@ -46,7 +46,7 @@
 - [ ]  결과 평가
 
 ## Revision History
-- [20.08.24] : 가격정보, 증권 뉴스 속보 파싱 (selenium), DB연동 저장
+- [20.08.24] : 가격정보, 증권 뉴스 속보 파싱 [30초 간격, selenium활용] (), DB연동 저장
 <img src= "BackEnd/PythonScripts/Resources/get_info.JPG" >
 
 - [20.08.24] : 뉴스 정보 확인 시 회사명이 겹치는 현상 수정
