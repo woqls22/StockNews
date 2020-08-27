@@ -9,8 +9,8 @@
 - 데이터 분석을 통한 정보 제공
 - 토론방 및 채팅방 구현
 
-## Predict Result
-<img src= "BackEnd/PythonScripts/Resources/ML.JPG" >
+## Predict Result (Train DataSet : 10000, Test DataSet : 1000)
+<img src= "BackEnd/PythonScripts/Resources/ML.png" >
 
 ## Structure
 <img src= "BackEnd/PythonScripts/Resources/structure.jpg" >
