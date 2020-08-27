@@ -10,6 +10,9 @@
 - 즐겨찾기한 기업에 해당하는 뉴스만 제공
 - 데이터 분석을 통한 정보 제공
 
+## Predict Result
+<img src= "BackEnd/PythonScripts/Resources/ML.JPG" >
+
 ## Structure
 <img src= "BackEnd/PythonScripts/Resources/structure.jpg" >
 
@@ -32,6 +35,7 @@
 - [X]  KOSPI / KOSDAQ 현재 시세, 그래프 파싱[08.24]
 - [X]  News History Table 작성[08.24]
 - [X]  News별 긍정, 중립, 부정 분류를 위한 라벨링 작업 진행[08.25]
+- [X]  Top20 News 학습된 모델을 통해 호재/악재 실시간 예측(predict.py)[08.27]
 - [ ]  News Headline 1만개 라벨링 작업
 - [ ]  분석된 긍정, 중립, 부정 라벨링을 바탕으로 모델 학습 진행
 - [ ]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화
