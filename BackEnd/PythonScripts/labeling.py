@@ -10,6 +10,7 @@ def make_word_list():
     while True:
         line = pos.readline()
         line = line.replace('\n', '')
+        line = line.replace('\r', '')
         positive.append(line)
         posneg.append(line)
         if not line : break
@@ -18,6 +19,7 @@ def make_word_list():
     while True:
         line = neg.readline()
         line = line.replace('\n', '')
+        line = line.replace('\r', '')
         negative.append(line)
         posneg.append(line)
         if not line: break
@@ -48,6 +50,7 @@ def Decision(score):
 def make_lable(filename):
     positive, negative, posneg = make_word_list()
     train_data = pd.read_csv(filename, encoding='CP949')
+    print(train_data.groupby('label').size().reset_index(name='count'))
     score = 0
     label = []
     headlines = train_data['headline']
@@ -62,5 +65,5 @@ def make_lable(filename):
     })
     data.to_csv(filename, index = False, encoding='cp949')
 if __name__ == '__main__':
-    make_lable('navernews.csv')
+    make_lable('Data/train.csv')
     print("done")
