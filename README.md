@@ -70,5 +70,5 @@
 - [20.08.27] : 히스토그램(뉴스라인 길이)
 <img src= "BackEnd/PythonScripts/Resources/histogram.JPG" >
 
-- [20.09.04] : 백엔드 json 객체 리턴 구현
+- [20.09.04] : 조회 api json 객체 리턴 구현
 <img src= "BackEnd/PythonScripts/Resources/backend.JPG" >
