@@ -77,3 +77,4 @@
 
 - [20.09.05] : 현재 기준 50일 가격정보, 거래량 정보 파싱, csv저장
 <img src= "BackEnd/PythonScripts/Resources/priceinfo.JPG" >
+<img src= "BackEnd/PythonScripts/Resources/info.png" >
