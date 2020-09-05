@@ -4,7 +4,6 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import xlrd
 import pandas as pd
-
 def find_price(code): #50일 자료 fetch
     stockItem = code
     url = 'http://finance.naver.com/item/sise_day.nhn?code=' + stockItem
@@ -46,6 +45,24 @@ def generate_codeInsert_query():
         code = sheet.cell(i, 0).value
         stock = sheet.cell(i,1).value
         print("INSERT INTO `stock`.`code` (`code`, `company`) VALUES ('"+code+"', '"+stock+"');")
+def generate_stockInsert_query():
+    xlsx = xlrd.open_workbook('Data/stockdata.xls')
+    sheet = xlsx.sheet_by_index(0)
+    for i in range(1,101):
+        code = sheet.cell(i, 0).value
+        stock = sheet.cell(i,1).value
+        print("CREATE TABLE info_"+ code +"("
+                                     'DATE_INFO VARCHAR(20)  NOT NULL, END_PRICE VARCHAR(20) NOT NULL, START_PRICE VARCHAR(20) NOT NULL,'
+                                     'HIGHEST VARCHAR(20) NOT NULL,'
+                                     'LOWEST VARCHAR(20) NOT NULL);')
+        for j in range(1,50):
+            info_csv = pd.read_csv('Data/Histories/'+stock+'_info.csv', encoding='CP949')
+            date= info_csv.iloc[j][0]
+            end_price = info_csv.iloc[j][1]
+            start_price = info_csv.iloc[j][2]
+            highest = info_csv.iloc[j][3]
+            lowest = info_csv.iloc[j][4]
+            print("INSERT INTO info_"+code+" VALUES ('" + date + "', '" + end_price +"', '" +start_price + "', '" +highest + "', '" +lowest+"');")
 def return_code(company):
     xlsx = xlrd.open_workbook('Data/stockdata.xls')
     sheet = xlsx.sheet_by_index(0)
@@ -71,9 +88,10 @@ def write_history(company):
         })
         data.to_csv('Data/Histories/'+company+'_Info.csv', index=False, encoding='cp949')
 if __name__ == '__main__':
-    xlsx = xlrd.open_workbook('Data/stockdata.xls')
-    sheet = xlsx.sheet_by_index(0)
-    for i in range(1, 101):
-        code = sheet.cell(i, 0).value
-        stock = sheet.cell(i, 1).value
-        write_history(stock)
+    # xlsx = xlrd.open_workbook('Data/stockdata.xls')
+    # sheet = xlsx.sheet_by_index(0)
+    # for i in range(1, 101):
+    #     code = sheet.cell(i, 0).value
+    #     stock = sheet.cell(i, 1).value
+    #     write_history(stock)
+    generate_stockInsert_query()
