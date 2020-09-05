@@ -13,7 +13,10 @@ def find_price(code): #50일 자료 fetch
     maxPage = source.find_all("table", align="center")
     mp = maxPage[0].find_all("td", class_="pgRR")
     Date=[]
-    price=[]
+    end_price=[]
+    start_price=[]
+    highest=[]
+    lowest=[]
     volume=[]
     mpNum = 5 #Max Page
     for page in range(1, mpNum + 1):
@@ -24,15 +27,18 @@ def find_price(code): #50일 자료 fetch
         isCheckNone = None
 
         if ((page % 1) == 0):
-            time.sleep(1)
+            time.sleep(0.5)
         for i in range(1, len(srlists) - 1):
             if (srlists[i].span != isCheckNone):
                 srlists[i].td.text
                 Date.append(srlists[i].find_all("td", align="center")[0].text)
-                price.append(srlists[i].find_all("td", class_="num")[0].text)
+                end_price.append(srlists[i].find_all("td", class_="num")[0].text) #종가
+                start_price.append(srlists[i].find_all("td", class_="num")[2].text) #시가
+                highest.append(srlists[i].find_all("td", class_="num")[3].text)  # 고가
+                lowest.append(srlists[i].find_all("td", class_="num")[4].text)  # 저가
                 volume.append(srlists[i].find_all("td", class_="num")[5].text)
-                print(srlists[i].find_all("td", align="center")[0].text, srlists[i].find_all("td", class_="num")[0].text,srlists[i].find_all("td", class_="num")[5].text)
-    return Date,price,volume
+                # print(srlists[i].find_all("td", align="center")[0].text, srlists[i].find_all("td", class_="num")[0].text,srlists[i].find_all("td", class_="num")[5].text)
+    return Date,end_price, start_price, highest, lowest,volume
 def generate_codeInsert_query():
     xlsx = xlrd.open_workbook('Data/stockdata.xls')
     sheet = xlsx.sheet_by_index(0)
@@ -54,10 +60,13 @@ def write_history(company):
     if(code=="None"):
         return
     else:
-        Date, price, volume = find_price(code)
+        Date,end_price, start_price, highest, lowest,volume = find_price(code)
         data = pd.DataFrame({
             '날짜': Date,
-            '가격': price,
+            '종가': end_price,
+            '시가': start_price,
+            '고가' : highest,
+            '저가' : lowest,
             '거래량': volume
         })
         data.to_csv('Data/Histories/'+company+'_Info.csv', index=False, encoding='cp949')
