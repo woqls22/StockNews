@@ -2,6 +2,8 @@ import news_parser as Util
 import datetime
 import time
 import DBHandler
+from tensorflow.keras.models import load_model
+import predict
 CompanyList=[]
 Headless = True # False : 창띄움, True : 창없음
 MakeCompanyList = False # 회사 리스트 갱신
@@ -43,9 +45,10 @@ if __name__ == '__main__':
         print("KospiImage Driver Err")
     MakeCompanyFile(MakeCompanyList) #기업 리스트 갱신
     DBController = DBHandler.MySqlController(host, ID, PW, DB_name)
-    print("News Updating...")
+
+    label=[]
     while(True):
-         try:
+           try:
             now = datetime.datetime.now()
             nowDatetime = now.strftime('%Y_%m_%d_%H시%M분%S초'.encode('unicode-escape').decode()).encode().decode('unicode-escape')
             nowDatehour = now.strftime('%Y_%m_%d_%H시%M분'.encode('unicode-escape').decode()).encode().decode('unicode-escape')
@@ -56,28 +59,30 @@ if __name__ == '__main__':
             NameList, PriceInfo, Fluctuation = GetPriceInfo(PriceDriver)
             # print("========================================")
             headlines, news_info, Text,NewsUrl,CompanyFromNews = GetNewsInfo(NewsDriver) #뉴스에서 기업 추출
-
+            print("News Updated...")
             Util.Write_News(headlines, CompanyFromNews,nowDatehour)  # 기업별 뉴스 자료 Writing
-
             Util.GetKospiGraph(KospiImageDriver, PriceInfo, Fluctuation) # Kospi, Kosdaq 그래프 이미지 저장
-
-            DBController.UpdateNews(CompanyFromNews, headlines, Text, NewsUrl, news_info) #최신 20개 기사 DB저장
+            print("Get Kospi Graph")
+            label = predict.classification(headlines,model)
+            print("Get labels")
+            DBController.UpdateNews(CompanyFromNews, headlines, Text, NewsUrl, news_info,label) #최신 20개 기사 DB저장
             DBController.InsertNewsHistory(CompanyFromNews, headlines, Text, NewsUrl, news_info,nowDatehour)
             # ==== 30초마다 반복 수행
             time.sleep(30)
             NewsDriver.refresh()
             PriceDriver.refresh()
-         except:
-             print("ERR OCCURRED")
-             NewsDriver.quit()
-             PriceDriver.quit()
-             KospiImageDriver.quit()
-             CompanyList = Util.GetCompanyList()  # 코스피 상장 기업 업로드
-             NewsDriver = Util.News_get_driver(Headless)
-             PriceDriver = Util.NowPriceDriver(Headless)
-             KospiImageDriver = Util.Get_KospiGraphDriver(Headless)
-             print("Web driver is reconstructed")
-             MakeCompanyFile(MakeCompanyList)  # 기업 리스트 갱신
-             DBController = DBHandler.MySqlController(host, ID, PW, DB_name)
-             print("Reconstructing...")
-             pass
+            KospiImageDriver.refresh()
+            print("DONE")
+           except:
+               NewsDriver.quit()
+               PriceDriver.quit()
+               KospiImageDriver.quit()
+               CompanyList = Util.GetCompanyList()  # 코스피 상장 기업 업로드
+               NewsDriver = Util.News_get_driver(Headless)
+               PriceDriver = Util.NowPriceDriver(Headless)
+               KospiImageDriver = Util.Get_KospiGraphDriver(Headless)
+               print("Web driver is reconstructed")
+               MakeCompanyFile(MakeCompanyList)  # 기업 리스트 갱신
+               DBController = DBHandler.MySqlController(host, ID, PW, DB_name)
+               print("Reconstructing...")
+               pass
