@@ -41,6 +41,7 @@
 - [X]  News Headline 1만개 라벨링 작업[08.27]
 - [X]  상위 Top20 뉴스, 회사별 증권 뉴스 조회 API구현[09.04]
 - [X]  현재 기준 50일 가격정보, 거래량 정보 파싱, csv저장[09.05]
+- [X]  종목별 거래 정보 api 구현[09.07]
 - [ ]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화
 - [ ]  시가, 종가, 일일 거래량, 변동추이 메트릭 수치화
 - [ ]  메트릭 종합. 투자지표 도출
@@ -78,3 +79,6 @@
 - [20.09.05] : 현재 기준 50일 가격정보, 거래량 정보 파싱, csv저장
 <img src= "BackEnd/PythonScripts/Resources/priceinfo.JPG" >
 <img src= "BackEnd/PythonScripts/Resources/info.png" >
+
+- [20.09.07] : 종목별 가격 조회 api 구현
+<img src= "BackEnd/PythonScripts/Resources/price.png" >
