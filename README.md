@@ -24,7 +24,7 @@
 - matplotlib 3.3.1
 - pillow 7.2.0
 - AWS RDS (mysql)
-- Spring boot, React.js
+- Spring boot,  React.js
 
 ## Schedule
 - [X]  KTOP 30, KOSPI, KOSPI200, KOSDAQ, KOSDAQ150, KRX300 가격 정보 파싱 [08.24]
