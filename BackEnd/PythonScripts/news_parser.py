@@ -4,6 +4,8 @@ import datetime
 import pandas as pd
 import csv
 import urllib.request
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from PIL import Image
 import time
@@ -18,7 +20,7 @@ def PrintNews(headline_list, news_info, Text, CompanyFromNews):
 def PrintPrice(NameList, PriceInfo, Fluctuation):
     for i in range(len(NameList)):
         print(NameList[i], end=' : ')
-        print(PriceInfo[i], end='[KRW], / 전일대비 : ')
+        print(PriceInfo[i], end='[KRW] / Fluctuation : ')
         print(Fluctuation[i])
 def News_get_driver(Headless):
    if(Headless):
@@ -26,10 +28,10 @@ def News_get_driver(Headless):
        chrome_options.add_argument('headless')
        chrome_options.add_argument('--disable-gpu')
        chrome_options.add_argument('land=ko_KR')
-       driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe", chrome_options=chrome_options)
+       driver = webdriver.Chrome("C:\\Users\\woqls\\PycharmProjects\\StockNews\\chromedriver.exe", chrome_options=chrome_options)
        driver.implicitly_wait(1)
    else:
-       driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
+       driver = webdriver.Chrome("C:\\Users\\woqls\\PycharmProjects\\StockNews\\chromedriver.exe")
    url = "https://news.naver.com/main/list.nhn?mode=LS2D&mid=shm&sid1=101&sid2=258"  # Naver Stock News
    driver.get(url)  # driver open
    return driver
@@ -113,33 +115,31 @@ def NowPriceDriver(Headless):
         chrome_options.add_argument('headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('land=ko_KR')
-        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe",
+        driver = webdriver.Chrome("C:\\Users\\woqls\\PycharmProjects\\StockNews\\chromedriver.exe",
                                   chrome_options=chrome_options)
         driver.implicitly_wait(3)
     else:
-        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
-    url = "http://www.krx.co.kr/main/main.jsp"  # 한국 거래소
+        driver = webdriver.Chrome("C:\\Users\\woqls\\PycharmProjects\\StockNews\\chromedriver.exe")
+    url = "https://kr.investing.com/indices/south-korea-indices"  # 다음금융
     driver.get(url)  # driver open
+
     return driver
 
 def get_prices(driver):
-    NameList = [] # 종목
+    NameList = ["KOSPI", "KOSDAQ"] # 종목
     PriceInfo=[] # 현재 가격 정보
-    Fluctuation = [] #전일 대비 변동폭mai
-    table = driver.find_element_by_class_name('section-wap-top')
-    cols = table.find_elements_by_class_name('index-info_wap')
-    for index, value in enumerate(cols):
-        info = value.find_elements_by_class_name('index-price')[0]
-        Name = value.find_elements_by_class_name('index-name')[0]
-        change = value.find_elements_by_class_name('index-up')
-        if(len(change)<=0):
-            change =  value.find_elements_by_class_name('index-down')[0]
-        else:
-            change = value.find_elements_by_class_name('index-up')[0]
-        NameList.append(Name.text)
-        PriceInfo.append(info.text)
-        Fluctuation.append(change.text)
+    Fluctuation = [] #전일 대비 변동폭
+    #table = driver.find_element_by_css_selector('body > div > div.body-wrap > div.info-first > div.section-wap-top')
 
+    Kospi_price = driver.find_element_by_xpath('//*[@id="pair_37426"]/td[3]').text
+    Kosdaq_price = driver.find_element_by_xpath('//*[@id="pair_38016"]/td[3]').text
+    PriceInfo.append(Kospi_price)
+    PriceInfo.append(Kosdaq_price)
+
+    Kospi_Fluctuation = driver.find_element_by_xpath('/html/body/div[5]/section/table/tbody/tr/td/table/tbody/tr[2]/td[6]').text+"["+driver.find_element_by_xpath('/html/body/div[5]/section/table/tbody/tr/td/table/tbody/tr[2]/td[7]').text+"]"
+    Kosdaq_Fluctuation = driver.find_element_by_xpath('/html/body/div[5]/section/table/tbody/tr/td/table/tbody/tr[10]/td[6]').text+"["+driver.find_element_by_xpath('/html/body/div[5]/section/table/tbody/tr/td/table/tbody/tr[10]/td[7]').text+"]"
+    Fluctuation.append(Kospi_Fluctuation)
+    Fluctuation.append(Kosdaq_Fluctuation)
     return NameList, PriceInfo, Fluctuation
 
 def GetCompanyList():
@@ -236,11 +236,11 @@ def Get_KospiGraphDriver(Headless):
         chrome_options.add_argument('headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('land=ko_KR')
-        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe",
+        driver = webdriver.Chrome("C:\\Users\\woqls\\PycharmProjects\\StockNews\\chromedriver.exe",
                                   chrome_options=chrome_options)
         driver.implicitly_wait(3)
     else:
-        driver = webdriver.Chrome("C:\\Users\\user1\\PycharmProjects\\StockNews\\chromedriver.exe")
+        driver = webdriver.Chrome("C:\\Users\\woqls\\PycharmProjects\\StockNews\\chromedriver.exe")
     url = "https://finance.daum.net/"  # 다음금융
     driver.get(url)  # driver open
     return driver
@@ -253,7 +253,7 @@ def GetKospiGraph(driver, PriceInfo, Fluctuation ):
     urllib.request.urlretrieve(link, 'Data/Kospi.jpg') #코스피 이미지 다운로드
     link=KosdaqImg.get_attribute('src')
     urllib.request.urlretrieve(link, 'Data/Kosdaq.jpg') #코스닥 이미지 다운로드
-
+    time.sleep(5)
     KospiGraph =  Image.open("Data/Kospi.jpg").convert("RGBA")
     KosdaqGraph = Image.open("Data/Kosdaq.jpg").convert("RGBA")
 
@@ -261,14 +261,13 @@ def GetKospiGraph(driver, PriceInfo, Fluctuation ):
     rows = 1
     cols = 2
     ax1 = fig.add_subplot(rows, cols, 1)
-    ax1.imshow(KospiGraph)
-    ax1.set_xlabel('KOSPI\nPrice : '+PriceInfo[1]+' / Fluctuation : '+Fluctuation[1])
+    #ax1.imshow(KospiGraph)
+    ax1.set_xlabel('KOSPI\nPrice : '+PriceInfo[0]+' / Fluctuation : '+Fluctuation[0])
     ax1.set_xticks([]), ax1.set_yticks([])
 
     ax2 = fig.add_subplot(rows, cols, 2)
-    ax2.imshow(KosdaqGraph)
-    ax2.set_xlabel('KODAQ\nPrice : '+PriceInfo[3]+' / Fluctuation : '+Fluctuation[3])
+    #ax2.imshow(KosdaqGraph)
+    ax2.set_xlabel('KODAQ\nPrice : '+PriceInfo[1]+' / Fluctuation : '+Fluctuation[1])
     ax2.set_xticks([]), ax2.set_yticks([])
-    #plt.show()
-    plt.savefig('KOSPI_KOSDAQ.png')
+    plt.savefig('./KOSPI_KOSDAQ.png')
     plt.close(fig)
