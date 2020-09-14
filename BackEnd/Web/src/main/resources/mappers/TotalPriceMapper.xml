@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="stock.stockproject.dao.TotalPriceDAO"><!--namespace를 통해 NewsDAO 연결합니다. -->
+    <select id="get_total_prices"  parameterType="stock.stockproject.dto.TotalPriceDTO" resultType="stock.stockproject.dto.TotalPriceDTO"><!-- getHistory()메서드를 호출하면 실행할 SELECT문,
+						NewsDTO 객체를 파라미터로 받아, HistoryDTO 반환-->
+        SELECT * FROM TotalPrice
+    </select>
+</mapper>
