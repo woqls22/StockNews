@@ -53,3 +53,10 @@ class MySqlController:
             sql = 'CREATE TABLE info_'+code+' (DATE_INFO DATE NOT NULL, END_PRICE VARCHAR(20) NOT NULL, START_PRICE VARCHAR(20) NOT NULL, HIGHEST VARCHAR(20) NOT NULL,LOWEST VARCHAR(20) NOT NULL, VOLUME VARCHAR(30));'
             self.curs.execute(sql)
             self.conn.commit()
+    def update_totalprice(self, PriceList, Fluctuation):
+        sql = "UPDATE TotalPrice SET Price = %s, Fluctuation = %s where name = 'KOSPI'"
+        self.curs.execute(sql, (PriceList[0], Fluctuation[0]))
+        self.conn.commit()
+        sql = "UPDATE TotalPrice SET Price = %s, Fluctuation = %s where name = 'KOSDAQ'"
+        self.curs.execute(sql, (PriceList[1], Fluctuation[1]))
+        self.conn.commit()

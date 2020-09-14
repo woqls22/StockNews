@@ -58,6 +58,7 @@ if __name__ == '__main__':
             try:
                 NameList, PriceInfo, Fluctuation = Util.get_prices(PriceDriver)
                 Util.PrintPrice(NameList,PriceInfo,Fluctuation)
+                DBController.update_totalprice(PriceInfo,Fluctuation)
             except Exception as ex:
                 print("Price Info Err")
                 print('에러가 발생 했습니다', ex)
