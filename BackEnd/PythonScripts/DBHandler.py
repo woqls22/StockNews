@@ -53,6 +53,7 @@ class MySqlController:
             sql = 'CREATE TABLE info_'+code+' (DATE_INFO DATE NOT NULL, END_PRICE VARCHAR(20) NOT NULL, START_PRICE VARCHAR(20) NOT NULL, HIGHEST VARCHAR(20) NOT NULL,LOWEST VARCHAR(20) NOT NULL, VOLUME VARCHAR(30));'
             self.curs.execute(sql)
             self.conn.commit()
+    
     def update_totalprice(self, PriceList, Fluctuation):
         sql = "UPDATE TotalPrice SET Price = %s, Fluctuation = %s where name = 'KOSPI'"
         self.curs.execute(sql, (PriceList[0], Fluctuation[0]))
@@ -60,3 +61,21 @@ class MySqlController:
         sql = "UPDATE TotalPrice SET Price = %s, Fluctuation = %s where name = 'KOSDAQ'"
         self.curs.execute(sql, (PriceList[1], Fluctuation[1]))
         self.conn.commit()
+        
+    def update_predict_result(self, price, volume, div, bps, per, eps, pbr, model_result,score, result,code):
+        sql = "UPDATE Top100 SET Prices = %s,Volumes = %s,DIVs = %s,BPS = %s,PER = %s,EPS = %s,PBR = %s,model1 = %s,model2 = %s, result = %s WHERE Codes = %s"
+        print((price, volume, div, bps, per, eps, pbr, model_result,score, result, code))
+        self.curs.connection.encoders[np.int64] = lambda value, encoders: int(value)
+        self.curs.execute(sql, (price, volume, div, bps, per, eps, pbr, model_result,score, result, code))
+        self.conn.commit()
+
+    def get_newses(self, company):
+        sql = "SELECT * FROM NewsHistory where Company = %s"
+        self.curs.execute(sql, (company))
+        self.conn.commit()
+        result = self.curs.fetchall()
+        Headlines = []
+        for row_data in result:
+            Headline = row_data[1]
+            Headlines.append(Headline)
+        return Headlines       
