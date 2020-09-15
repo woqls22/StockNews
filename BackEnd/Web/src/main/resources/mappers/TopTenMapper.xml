@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="stock.stockproject.dao.TopTenDAO"><!--namespace를 통해 NewsDAO 연결합니다. -->
+    <select id="get_topten"  parameterType="stock.stockproject.dto.TopTenDTO" resultType="stock.stockproject.dto.TopTenDTO"><!-- getHistory()메서드를 호출하면 실행할 SELECT문,
+						NewsDTO 객체를 파라미터로 받아, HistoryDTO 반환-->
+        select * from Top100 order by result desc limit 10
+    </select>
+</mapper>
