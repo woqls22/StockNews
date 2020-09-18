@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="stock.stockproject.dao.PredictDAO"><!--namespace를 통해 PredictDAO 연결합니다. -->
+    <select id="getPrediction"  parameterType="stock.stockproject.dto.PredictDTO" resultType="stock.stockproject.dto.PredictDTO"><!-- getHistory()메서드를 호출하면 실행할 SELECT문,
+						PredictDTO 객체를 파라미터로 받아, PredictDTO 반환-->
+        SELECT * FROM Top100
+        <if test='company != null and company != "-"'><!-- 만약 파라미터에 company 있다면 SQL문에 WHERE절을 추가 -->
+            WHERE Companies = #{company}
+        </if>
+    </select>
+</mapper>
