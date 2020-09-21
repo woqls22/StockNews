@@ -1,0 +1,23 @@
+/* customized antd */
+
+@import '~antd/dist/antd.css';
+
+.ant-menu {
+    border-bottom: solid 1px #e8e8e8;
+    box-shadow: 0 0 10px #f3f1f1;
+    background-color: white;
+    font-size: 15px;
+  }
+
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
+    margin: 0 25px 0px 25px;
+}
+
+.ant-menu svg {
+    font-size: 25px;
+}
+
+.ant-menu-horizontal {
+    border-bottom: 1px;
+    line-height: 70px;
+}

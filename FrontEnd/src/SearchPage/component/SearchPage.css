@@ -1,0 +1,83 @@
+
+.search-container {
+    display: flex;
+    flex-direction: column;  
+}
+
+.title, .search-bar, .result .rangking-list{
+    flex: 1;
+    margin: 0 auto;
+}
+
+.rangking-list {
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 650px
+}
+
+.rangking-list li {
+    font-size: 17px;
+    margin-right: auto;
+    width: 300px;
+}
+
+.title {
+    margin-top: 70px;
+    margin-bottom: 0px;
+}
+
+.search-bar {
+    margin-top: 20px;
+}
+
+
+.ant-input-group {
+    width: 600px;
+}
+
+.result {
+    display: flex;
+    flex-direction: column; 
+    margin-top: 100px;
+    margin: auto;
+    width: 650px; 
+}
+
+.result>.ant-typography {
+    flex:1;
+    margin-top: 50px;
+}
+
+.result>.ant-col {
+    margin-top: 20px;
+    flex: 1;
+}
+.result>.ant-col {
+    margin: 0 auto;
+}
+
+.score-container {
+    display: flex;
+    flex-direction: row;  
+    margin: auto;
+    margin-top: 20px;
+}
+.score-container>.prediction-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.score-container>.prediction-text {
+    display: flex;
+    margin: auto;
+    margin-left: 60px;
+    overflow:hidden;
+    height:auto !important;
+} 
+
+.score-container>.prediction-text>p {
+    color: green;
+    font-size: 18px; 
+    font-weight: 500;
+    text-align: center;
+}

@@ -1,13 +1,20 @@
 # StockNews
 주식뉴스서비스
+Contributed by [seung-00](https://github.com/seung-00), [ShiningSu0](https://github.com/ShiningSu0)
+
+이재빈 - API 모듈, 뉴스예측모델, 데이터 크롤링 모듈 작성, 모듈통합, 클라우드 서버 임포트 작업 진행
+
+김수영 - 기본적 분석 알고리즘 작성, 주가예측 모델 훈련 및 구현
+
+오승영 - 프론트 엔드 작업(UI UX 구현), 애니메이션 효과 적용
+
+## Demo
+<img src= "BackEnd/PythonScripts/Resources/demo.gif" >
 
 ## Description
 - 증권가 실시간 뉴스 파싱 및 정보 제공 (웹서비스)
-- 가장 관심도가 높은 종목 파악
-- 종목별 호재,악재 수치화 객관적 지표 제공
-- 즐겨찾기한 기업에 해당하는 뉴스만 제공
-- 데이터 분석을 통한 정보 제공
-- 토론방 및 채팅방 구현
+- 종목별 호재,악재 분석(ML 모델)과 기본적분석(20년치 데이터 기반 ML 모델)을 진행. 각 결과를 조합하여 투자지표 도출
+- 분석된 투자지표를 바탕으로 종목 추천(예측도가 높은순으로 Top 10 종목 추천)
 
 ## Predict Result (Train DataSet : 10000, Test DataSet : 1000)
 <img src= "BackEnd/PythonScripts/Resources/ML.png" >
@@ -48,10 +55,10 @@
 - [X]  분석된 긍정, 부정 뉴스를 통해 해당 종목에 투자 지수화[09.16]
 - [X]  시가, 종가, 일일 거래량, 변동추이 메트릭 수치화[09.16]
 - [X]  메트릭 종합. 투자지표 도출[09.16]
-- [ ]  종목별 해당하는 뉴스 분류기 웹서비스 구현
-- [ ]  지표를 바탕으로 모의 투자 진행
-- [ ]  KOSPI / KOSDAQ 상장 기업 DB 자동 업로드 모듈 구현
-- [ ]  결과 평가
+- [X]  프론트 엔드 구현[~09.21] Contributed by [seung-00](https://github.com/seung-00)  
+- [X]  종목별 해당하는 뉴스 분류기 웹서비스 구현[09.21]
+- [X]  KOSPI / KOSDAQ 상장 기업 DB 자동 업로드 모듈 구현[09.21]
+- [X]  네이버클라우드 서버 임포팅[09.21]
 
 ## Revision History
 - [20.08.24] : 가격정보, 증권 뉴스 속보 파싱 [30초 간격, selenium활용] (), DB연동 저장
@@ -85,3 +92,6 @@
 
 - [20.09.07] : 종목별 가격 조회 api 구현
 <img src= "BackEnd/PythonScripts/Resources/price.png" >
+
+- [20.09.21] : 최종 결과물
+<img src= "BackEnd/PythonScripts/Resources/demo.gif" >

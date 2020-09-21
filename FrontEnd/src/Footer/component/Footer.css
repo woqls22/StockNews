@@ -1,0 +1,24 @@
+.footer{
+  margin-top: auto;
+  height: 45px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.footer {
+  font-size: 18px;
+}
+.footer>.KISA{
+  font-size: 23px;
+  font-family: 'Arial', 'Helvetica', 'sans-serif';
+  color: #081658;
+  font-weight: 600;
+  margin-right: 10px;
+}
+.footer>.NBP {
+  font-size: 23px;
+  margin-left:10px;
+  color: #2DB400;
+  font-weight: 800;
+  font-family: 'Arial Black', 'Gadget', 'sans-serif';
+}
