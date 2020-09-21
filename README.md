@@ -9,7 +9,7 @@ Contributed by [seung-00](https://github.com/seung-00), [ShiningSu0](https://git
 오승영 - 프론트 엔드 작업(UI UX 구현), 애니메이션 효과 적용
 
 ## Demo
-<img src= "BackEnd/PythonScripts/Resources/demo.gif" >
+<img src= "BackEnd/PythonScripts/Resources/Demo.gif" >
 
 ## Description
 - 증권가 실시간 뉴스 파싱 및 정보 제공 (웹서비스)
@@ -94,4 +94,4 @@ Contributed by [seung-00](https://github.com/seung-00), [ShiningSu0](https://git
 <img src= "BackEnd/PythonScripts/Resources/price.png" >
 
 - [20.09.21] : 최종 결과물
-<img src= "BackEnd/PythonScripts/Resources/demo.gif" >
+<img src= "BackEnd/PythonScripts/Resources/Demo.gif" >
