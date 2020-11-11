@@ -1,6 +1,9 @@
 # StockNews
-주식뉴스서비스
-Contributed by [seung-00](https://github.com/seung-00), [ShiningSu0](https://github.com/ShiningSu0)
+종목의 주가 상승 및 하락을 예측해주는 웹서비스입니다.
+
+[한국인터넷진흥원 주최 제8회 핀테크 해커톤 우수상 수상]
+
+Contributed by [오승영](https://github.com/seung-00), [김수영](https://github.com/ShiningSu0)
 
 이재빈 - API 모듈, 뉴스예측모델, 데이터 크롤링 모듈 작성, 모듈통합, 클라우드 서버 임포트 작업 진행
 
